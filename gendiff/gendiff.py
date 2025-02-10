@@ -1,5 +1,5 @@
 import argparse
-from gendiff.parser import parse_files
+from gendiff.parser import generate_diff
 
 
 def gendiff():
@@ -14,5 +14,6 @@ def gendiff():
     args = parser.parse_args()
 
     if args.first_file and args.second_file:
-        parse_files(args.first_file, args.second_file)
+        diff = generate_diff(args.first_file, args.second_file)
+        print(diff)
 
