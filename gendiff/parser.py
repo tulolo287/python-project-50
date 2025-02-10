@@ -27,11 +27,10 @@ def generate_diff(file_path1, file_path2):
             res.append(f"+ {key}: {file2[key]}")
         if key in common_data:
             if file1[key] == file2[key]:
-                 res.append(f"  {key}: {file1[key]}")
+                res.append(f"  {key}: {file1[key]}")
             else:
                 res.append(f"- {key}: {file1[key]}")
                 res.append(f"+ {key}: {file2[key]}")
-    res = "\n""  ".join(res) + "\n}"
+    res = "\n  ".join(res) + "\n}"
 
     return res
-
