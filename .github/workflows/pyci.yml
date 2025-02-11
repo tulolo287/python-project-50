@@ -31,5 +31,4 @@ jobs:
           debug: true
       - name: Test with pytest
         run: |
-          pip install pytest pytest-cov
-          pytest
+          make test
