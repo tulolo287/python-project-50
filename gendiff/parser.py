@@ -1,11 +1,13 @@
 import json
+
 import yaml
+
 
 def generate_diff(file_path1, file_path2):
     res = ["{"]
 
-    file1 = load_file(file_path1) #json.load(open(file_path1))
-    file2 = load_file(file_path2) #json.load(open(file_path2))
+    file1 = load_file(file_path1)
+    file2 = load_file(file_path2)
 
     file1_elements = set(file1)
     file2_elements = set(file2)

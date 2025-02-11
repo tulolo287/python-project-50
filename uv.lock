@@ -15,7 +15,6 @@ name = "hexlet-code"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pytest" },
     { name = "pyyaml" },
     { name = "ruff" },
     { name = "uv" },
@@ -29,7 +28,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pytest", specifier = "==8.3.4" },
     { name = "pyyaml", specifier = "==6.0.2" },
     { name = "ruff", specifier = ">=0.9.3" },
     { name = "uv", specifier = "==0.5.7" },
