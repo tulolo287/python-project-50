@@ -10,3 +10,5 @@ package-reinstall:
 	uv tool install --reinstall dist/*.whl
 lint:
 	uv run ruff check
+test:
+	uv run pytest

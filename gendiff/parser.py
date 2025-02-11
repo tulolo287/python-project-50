@@ -1,11 +1,11 @@
 import json
-
+import yaml
 
 def generate_diff(file_path1, file_path2):
     res = ["{"]
 
-    file1 = json.load(open(file_path1))
-    file2 = json.load(open(file_path2))
+    file1 = load_file(file_path1) #json.load(open(file_path1))
+    file2 = load_file(file_path2) #json.load(open(file_path2))
 
     file1_elements = set(file1)
     file2_elements = set(file2)
@@ -34,3 +34,11 @@ def generate_diff(file_path1, file_path2):
     res = "\n  ".join(res) + "\n}"
 
     return res
+
+
+def load_file(file_path):
+    file_extension = file_path.split(".")[-1]
+    if file_extension == "json":
+        return json.load(open(file_path))
+    if file_extension == "yml":
+        return yaml.load(open(file_path), Loader=yaml.Loader)
