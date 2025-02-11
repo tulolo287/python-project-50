@@ -42,5 +42,5 @@ def load_file(file_path):
     file_extension = file_path.split(".")[-1]
     if file_extension == "json":
         return json.load(open(file_path))
-    if file_extension == "yml":
+    if file_extension == "yml" or file_extension == "yaml":
         return yaml.load(open(file_path), Loader=yaml.Loader)

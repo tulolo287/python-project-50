@@ -21,6 +21,7 @@ jobs:
       - name: Run linter and pytest
         run: |
           make lint
+          make test
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v9.0.0
         if: github.ref_name == 'main'
@@ -29,6 +30,3 @@ jobs:
         with:
           coverageCommand: make test-coverage
           debug: true
-      - name: Test with pytest
-        run: |
-          make test
