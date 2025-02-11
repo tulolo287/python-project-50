@@ -29,3 +29,7 @@ jobs:
         with:
           coverageCommand: make test-coverage
           debug: true
+      - name: Test with pytest
+        run: |
+          pip install pytest pytest-cov
+          pytest
