@@ -6,7 +6,7 @@ common:
         key: value
         doge:
             wow: ""
-group1:
+group1: 
     baz: bas
     foo: bar
     nest:

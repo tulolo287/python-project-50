@@ -11,6 +11,6 @@ package-reinstall:
 lint:
 	uv run ruff check
 test:
-	uv run pytest
+	uv run pytest -vv
 test-coverage:
 	uv run pytest --cov=gendiff --cov-report xml tests/
