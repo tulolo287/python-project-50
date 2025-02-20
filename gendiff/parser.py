@@ -10,7 +10,7 @@ def generate_diff(file_path1, file_path2):
     file2 = load_file(file_path2)
 
     ast = gen_ast(file1, file2)
-    print(formatter(ast))
+    return formatter(ast)
 
 
 def load_file(file_path):
@@ -21,7 +21,9 @@ def load_file(file_path):
         return yaml.load(open(file_path), Loader=yaml.Loader)
 
 
-def gen_ast(file1, file2, ast=[]):
+def gen_ast(file1, file2):
+    ast = []
+
     file1_elements = set(file1)
     file2_elements = set(file2)
 
@@ -31,7 +33,6 @@ def gen_ast(file1, file2, ast=[]):
     all_data = sorted(file1_elements | file2_elements)
 
     for key in all_data:
-
         if key in file1 and type(file1[key]) is bool:
             file1[key] = str(file1[key]).lower()
         if key in file2 and type(file2[key]) is bool:
@@ -42,65 +43,73 @@ def gen_ast(file1, file2, ast=[]):
         if key in file2 and file2[key] is None:
             file2[key] = "null"
 
-        if (
-            key in file1
-            and isinstance(file1[key], dict)
-            and key in file2
-            and isinstance(file2[key], dict)
-        ):
-            node = gen_ast(file1[key], file2[key])
+        if key in common_data:
+            old_value = None
+            action = "unchanged"
+            if isinstance(file1[key], dict) and isinstance(file2[key], dict):
+                node = gen_ast(file1[key], file2[key])
+                node_type = "list"
+            elif isinstance(file1[key], dict):
+                node = gen_ast(file1[key], file1[key])
+                node_type = "list"
+                old_value = file2[key]
+                action = "change"
+            else:
+                if file1[key] != file2[key]:
+                    old_value = file1[key]
+                    action = "change"
+                node = file2[key]
+                node_type = "node"
             ast.append(
                 {
                     "name": key,
-                    "node_type": "list",
+                    "node_type": node_type,
                     "value": node,
-                    "action": "unchanged",
-                }
-            )
-
-        elif key in common_data:
-            ast.append(
-                {
-                    "name": key,
-                    "node_type": "node",
-                    "value": file1[key],
-                    "action": "unchanged",
+                    "old_value": old_value,
+                    "action": action,
                 }
             )
 
         elif key in minus_data:
             if isinstance(file1[key], dict):
-                gen_ast(file1[key], file1[key])
+                node = gen_ast(file1[key], file1[key])
+                node_type = "list"
             else:
-                ast.append(
-                    {
-                        "name": key,
-                        "node_type": "node",
-                        "value": file1[key],
-                        "action": "remove",
-                    }
-                )
+                node = file1[key]
+                node_type = "node"
+            ast.append(
+                {
+                    "name": key,
+                    "node_type": node_type,
+                    "value": node,
+                    "action": "remove",
+                }
+            )
         elif key in plus_data:
             if isinstance(file2[key], dict):
-                gen_ast(file2[key], file2[key])
+                node = gen_ast(file2[key], file2[key])
+                node_type = "list"
             else:
-                ast.append(
-                    {
-                        "name": key,
-                        "node_type": "node",
-                        "value": file2[key],
-                        "action": "add",
-                    }
-                )
+                node = file2[key]
+                node_type = "node"
+            ast.append(
+                {
+                    "name": key,
+                    "node_type": node_type,
+                    "value": node,
+                    "action": "add",
+                }
+            )
 
     return ast
 
 
-def formatter(ast, res=[]):
+def formatter(ast, res=["{"], ind="  "):
     for item in ast:
         name = item["name"]
         action = item["action"]
         value = item["value"]
+        old_value = item.get("old_value", None)
         node_type = item["node_type"]
         match action:
             case "remove":
@@ -111,9 +120,31 @@ def formatter(ast, res=[]):
                 sign = "  "
 
         if node_type == "node":
-            res.append(f"{sign}{name}: {value}")
-        else:
-            formatter(ast)
-        print(name)
-    "\n".join(res)
+            if action == "change":
+                if not old_value:
+                    res.append(f"{ind}- {name}:")
+                else:
+                    res.append(f"{ind}- {name}: {old_value}")
+                res.append(f"{ind}+ {name}: {value}")
+            else:
+                res.append(f"{ind}{sign}{name}: {value}")
+        elif node_type == "list":
+            if action == "change":
+                res.append(f"{ind}- {name}: {{")
+                tmp = ind
+                ind += "    "
+                formatter(value, res, ind)
+                ind = tmp
+                res.append(f"{ind}  }}")
+                res.append(f"{ind}+ {name}: {old_value}")
+                continue
+            res.append(f"{ind}{sign}{name}: {{")
+            tmp = ind
+            ind += "    "
+            formatter(value, res, ind)
+            ind = tmp
+            res.append(f"{ind}  }}")
+            continue
+
+    res = "\n".join(res) + "\n}\n"
     return res
