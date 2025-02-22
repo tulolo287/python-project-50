@@ -1,8 +1,5 @@
 {
-	"timeout": {
-		"verbos222e": true,
-		"host2": "he222xlet.io"
-	},
+	"timeout": 20,
 	"verbose": true,
 	"host": "hexlet.io"
 }

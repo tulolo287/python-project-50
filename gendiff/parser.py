@@ -2,15 +2,15 @@ import json
 
 import yaml
 
-from gendiff.utils.utils import make_ast
+from gendiff.formatters import format_stylish
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1, file_path2, format_name='stylish'):
     file1 = load_file(file_path1)
     file2 = load_file(file_path2)
 
-    ast = gen_ast(file1, file2)
-    return formatter(ast)
+    ast = generate_ast(file1, file2)
+    return format_stylish(ast)
 
 
 def load_file(file_path):
@@ -21,7 +21,7 @@ def load_file(file_path):
         return yaml.load(open(file_path), Loader=yaml.Loader)
 
 
-def gen_ast(file1, file2):
+def generate_ast(file1, file2):
     ast = []
 
     file1_elements = set(file1)
@@ -47,10 +47,10 @@ def gen_ast(file1, file2):
             old_value = None
             action = "unchanged"
             if isinstance(file1[key], dict) and isinstance(file2[key], dict):
-                node = gen_ast(file1[key], file2[key])
+                node = generate_ast(file1[key], file2[key])
                 node_type = "list"
             elif isinstance(file1[key], dict):
-                node = gen_ast(file1[key], file1[key])
+                node = generate_ast(file1[key], file1[key])
                 node_type = "list"
                 old_value = file2[key]
                 action = "change"
@@ -72,7 +72,7 @@ def gen_ast(file1, file2):
 
         elif key in minus_data:
             if isinstance(file1[key], dict):
-                node = gen_ast(file1[key], file1[key])
+                node = generate_ast(file1[key], file1[key])
                 node_type = "list"
             else:
                 node = file1[key]
@@ -87,7 +87,7 @@ def gen_ast(file1, file2):
             )
         elif key in plus_data:
             if isinstance(file2[key], dict):
-                node = gen_ast(file2[key], file2[key])
+                node = generate_ast(file2[key], file2[key])
                 node_type = "list"
             else:
                 node = file2[key]
@@ -103,48 +103,3 @@ def gen_ast(file1, file2):
 
     return ast
 
-
-def formatter(ast, res=["{"], ind="  "):
-    for item in ast:
-        name = item["name"]
-        action = item["action"]
-        value = item["value"]
-        old_value = item.get("old_value", None)
-        node_type = item["node_type"]
-        match action:
-            case "remove":
-                sign = "- "
-            case "add":
-                sign = "+ "
-            case "unchanged":
-                sign = "  "
-
-        if node_type == "node":
-            if action == "change":
-                if not old_value:
-                    res.append(f"{ind}- {name}:")
-                else:
-                    res.append(f"{ind}- {name}: {old_value}")
-                res.append(f"{ind}+ {name}: {value}")
-            else:
-                res.append(f"{ind}{sign}{name}: {value}")
-        elif node_type == "list":
-            if action == "change":
-                res.append(f"{ind}- {name}: {{")
-                tmp = ind
-                ind += "    "
-                formatter(value, res, ind)
-                ind = tmp
-                res.append(f"{ind}  }}")
-                res.append(f"{ind}+ {name}: {old_value}")
-                continue
-            res.append(f"{ind}{sign}{name}: {{")
-            tmp = ind
-            ind += "    "
-            formatter(value, res, ind)
-            ind = tmp
-            res.append(f"{ind}  }}")
-            continue
-
-    res = "\n".join(res) + "\n}\n"
-    return res

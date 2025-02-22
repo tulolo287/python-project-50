@@ -7,3 +7,5 @@
 [![asciicast](https://asciinema.org/a/dLrnMqWZX8XYskIB79gZ2Icgl.svg)](https://asciinema.org/a/dLrnMqWZX8XYskIB79gZ2Icgl)
 ### Сравнение плоских файлов (YAML)
 [![asciicast](https://asciinema.org/a/f7UtWTNA8zMzwS2eXGBLqqHoR.svg)](https://asciinema.org/a/f7UtWTNA8zMzwS2eXGBLqqHoR)
+### Рекурсивное сравнение
+[![asciicast](https://asciinema.org/a/6yZwPSG7twRuWFVgQRWMhQQzx.svg)](https://asciinema.org/a/6yZwPSG7twRuWFVgQRWMhQQzx)

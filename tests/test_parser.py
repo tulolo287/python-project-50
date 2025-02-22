@@ -1,5 +1,7 @@
 import os
 
+import pytest
+
 from gendiff.parser import generate_diff
 
 
@@ -15,9 +17,34 @@ def read_file(file_path):
         return file.read()
 
 
-def test_generate_diff():
-    file1_path = get_current_path("test_data/nested1.json")
-    file2_path = get_current_path("test_data/nested2.json")
-    result = read_file("test_data/result.txt")
+@pytest.fixture
+def fixture(request):
+    file1 = get_current_path(request.param[0])
+    file2 = get_current_path(request.param[1])
+    return generate_diff(file1, file2)
 
-    assert generate_diff(file1_path, file2_path) == result
+
+testdata = [
+    (
+        ["test_data/file1.json", "test_data/file2.json"],
+        "test_data/result.txt",
+    ),
+    (
+        ["test_data/file1.yml", "test_data/file2.yml"],
+        "test_data/result.txt",
+    ),
+    (
+        ["test_data/nested1.json", "test_data/nested2.json"],
+        "test_data/nested_result.txt",
+    ),
+    (
+        ["test_data/nested1.yml", "test_data/nested2.yml"],
+        "test_data/nested_result.txt",
+    ),
+]
+
+
+@pytest.mark.parametrize("fixture, result", testdata, indirect=["fixture"])
+def test_generate_diff(fixture, result):
+    result = read_file(result)
+    assert fixture == result

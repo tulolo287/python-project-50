@@ -15,6 +15,8 @@ def gendiff():
     args = parser.parse_args()
 
     if args.first_file and args.second_file:
-        diff = generate_diff(args.first_file, args.second_file)
+        formatter = args.format if args.format else "stylish"
+        diff = generate_diff(
+            args.first_file, args.second_file, formatter
+        )
         print(diff)
-
