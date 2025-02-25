@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from gendiff.parser import generate_diff
+from gendiff import generate_diff
 
 
 def get_current_path(file_path):
@@ -57,6 +57,14 @@ testdata = [
     (
         ["test_data/nested/file1.yml", "test_data/nested/file2.yml", "plain"],
         "test_data/plain/result.txt",
+    ),
+    (
+        ["test_data/nested/file1.json", "test_data/nested/file2.json", "json"],
+        "test_data/json/result_nested.txt",
+    ),
+    (
+        ["test_data/nested/file1.yml", "test_data/nested/file2.yml", "json"],
+        "test_data/json/result_nested.txt",
     ),
 ]
 

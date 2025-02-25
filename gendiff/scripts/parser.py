@@ -2,7 +2,7 @@ import json
 
 import yaml
 
-from gendiff.formatters import format_plain, format_stylish
+from gendiff.formatters import format_json, format_plain, format_stylish
 
 
 def generate_diff(file_path1, file_path2, format_name="stylish"):
@@ -14,6 +14,8 @@ def generate_diff(file_path1, file_path2, format_name="stylish"):
         return format_stylish(ast)
     elif format_name == "plain":
         return format_plain(ast)
+    elif format_name == "json":
+        return format_json(ast)
 
 
 def load_file(file_path):

@@ -10,3 +10,4 @@ hello.py
 .vscode/
 .replit
 replit.nix
+*.cast

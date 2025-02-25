@@ -1,0 +1,226 @@
+[
+    {
+        "name": "common",
+        "node_type": "list",
+        "value": [
+            {
+                "name": "follow",
+                "node_type": "node",
+                "value": false,
+                "action": "add"
+            },
+            {
+                "name": "setting1",
+                "node_type": "node",
+                "value": "Value 1",
+                "old_value": "Value 1",
+                "action": "unchanged"
+            },
+            {
+                "name": "setting2",
+                "node_type": "node",
+                "value": 200,
+                "action": "remove"
+            },
+            {
+                "name": "setting3",
+                "node_type": "node",
+                "value": null,
+                "old_value": true,
+                "action": "change"
+            },
+            {
+                "name": "setting4",
+                "node_type": "node",
+                "value": "blah blah",
+                "action": "add"
+            },
+            {
+                "name": "setting5",
+                "node_type": "list",
+                "value": [
+                    {
+                        "name": "key5",
+                        "node_type": "node",
+                        "value": "value5",
+                        "old_value": "value5",
+                        "action": "unchanged"
+                    }
+                ],
+                "action": "add"
+            },
+            {
+                "name": "setting6",
+                "node_type": "list",
+                "value": [
+                    {
+                        "name": "doge",
+                        "node_type": "list",
+                        "value": [
+                            {
+                                "name": "wow",
+                                "node_type": "node",
+                                "value": "so much",
+                                "old_value": "",
+                                "action": "change"
+                            }
+                        ],
+                        "old_value": {
+                            "wow": ""
+                        },
+                        "action": "unchanged"
+                    },
+                    {
+                        "name": "key",
+                        "node_type": "node",
+                        "value": "value",
+                        "old_value": "value",
+                        "action": "unchanged"
+                    },
+                    {
+                        "name": "ops",
+                        "node_type": "node",
+                        "value": "vops",
+                        "action": "add"
+                    }
+                ],
+                "old_value": {
+                    "key": "value",
+                    "doge": {
+                        "wow": ""
+                    }
+                },
+                "action": "unchanged"
+            }
+        ],
+        "old_value": {
+            "setting1": "Value 1",
+            "setting2": 200,
+            "setting3": true,
+            "setting6": {
+                "key": "value",
+                "doge": {
+                    "wow": ""
+                }
+            }
+        },
+        "action": "unchanged"
+    },
+    {
+        "name": "group1",
+        "node_type": "list",
+        "value": [
+            {
+                "name": "baz",
+                "node_type": "node",
+                "value": "bars",
+                "old_value": "bas",
+                "action": "change"
+            },
+            {
+                "name": "foo",
+                "node_type": "node",
+                "value": "bar",
+                "old_value": "bar",
+                "action": "unchanged"
+            },
+            {
+                "name": "nest",
+                "node_type": "list",
+                "value": "str",
+                "old_value": [
+                    {
+                        "name": "key",
+                        "node_type": "node",
+                        "value": "value",
+                        "old_value": "value",
+                        "action": "unchanged"
+                    }
+                ],
+                "action": "change"
+            }
+        ],
+        "old_value": {
+            "baz": "bas",
+            "foo": "bar",
+            "nest": {
+                "key": "value"
+            }
+        },
+        "action": "unchanged"
+    },
+    {
+        "name": "group2",
+        "node_type": "list",
+        "value": [
+            {
+                "name": "abc",
+                "node_type": "node",
+                "value": 12345,
+                "old_value": 12345,
+                "action": "unchanged"
+            },
+            {
+                "name": "deep",
+                "node_type": "list",
+                "value": [
+                    {
+                        "name": "id",
+                        "node_type": "node",
+                        "value": 45,
+                        "old_value": 45,
+                        "action": "unchanged"
+                    }
+                ],
+                "old_value": {
+                    "id": 45
+                },
+                "action": "unchanged"
+            }
+        ],
+        "action": "remove"
+    },
+    {
+        "name": "group3",
+        "node_type": "list",
+        "value": [
+            {
+                "name": "deep",
+                "node_type": "list",
+                "value": [
+                    {
+                        "name": "id",
+                        "node_type": "list",
+                        "value": [
+                            {
+                                "name": "number",
+                                "node_type": "node",
+                                "value": 45,
+                                "old_value": 45,
+                                "action": "unchanged"
+                            }
+                        ],
+                        "old_value": {
+                            "number": 45
+                        },
+                        "action": "unchanged"
+                    }
+                ],
+                "old_value": {
+                    "id": {
+                        "number": 45
+                    }
+                },
+                "action": "unchanged"
+            },
+            {
+                "name": "fee",
+                "node_type": "node",
+                "value": 100500,
+                "old_value": 100500,
+                "action": "unchanged"
+            }
+        ],
+        "action": "add"
+    }
+]
