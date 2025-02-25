@@ -9,3 +9,5 @@
 [![asciicast](https://asciinema.org/a/f7UtWTNA8zMzwS2eXGBLqqHoR.svg)](https://asciinema.org/a/f7UtWTNA8zMzwS2eXGBLqqHoR)
 ### Рекурсивное сравнение
 [![asciicast](https://asciinema.org/a/6yZwPSG7twRuWFVgQRWMhQQzx.svg)](https://asciinema.org/a/6yZwPSG7twRuWFVgQRWMhQQzx)
+### Плоский формат
+[![asciicast](https://asciinema.org/a/LvG1CsNyUFLOQ8EyKqlDsGkVP.svg)](https://asciinema.org/a/LvG1CsNyUFLOQ8EyKqlDsGkVP)

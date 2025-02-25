@@ -21,25 +21,42 @@ def read_file(file_path):
 def fixture(request):
     file1 = get_current_path(request.param[0])
     file2 = get_current_path(request.param[1])
-    return generate_diff(file1, file2)
+    formatter = request.param[2]
+    return generate_diff(file1, file2, formatter)
 
 
 testdata = [
     (
-        ["test_data/file1.json", "test_data/file2.json"],
-        "test_data/result.txt",
+        [
+            "test_data/simple/file1.json",
+            "test_data/simple/file2.json",
+            "stylish",
+        ],
+        "test_data/simple/result.txt",
     ),
     (
-        ["test_data/file1.yml", "test_data/file2.yml"],
-        "test_data/result.txt",
+        ["test_data/simple/file1.yml", "test_data/simple/file2.yml", "stylish"],
+        "test_data/simple/result.txt",
     ),
     (
-        ["test_data/nested1.json", "test_data/nested2.json"],
-        "test_data/nested_result.txt",
+        [
+            "test_data/nested/file1.json",
+            "test_data/nested/file2.json",
+            "stylish",
+        ],
+        "test_data/nested/result.txt",
     ),
     (
-        ["test_data/nested1.yml", "test_data/nested2.yml"],
-        "test_data/nested_result.txt",
+        ["test_data/nested/file1.yml", "test_data/nested/file2.yml", "stylish"],
+        "test_data/nested/result.txt",
+    ),
+    (
+        ["test_data/nested/file1.json", "test_data/nested/file2.json", "plain"],
+        "test_data/plain/result.txt",
+    ),
+    (
+        ["test_data/nested/file1.yml", "test_data/nested/file2.yml", "plain"],
+        "test_data/plain/result.txt",
     ),
 ]
 

@@ -15,8 +15,8 @@ def process_ast(ast, lines=[], ind="  "):
 def format_node(item, res, ind):
     name = item["name"]
     action = item["action"]
-    value = item["value"]
-    old_value = item.get("old_value", None)
+    value = format_value(item["value"])
+    old_value = format_value(item.get("old_value", None))
     node_type = item["node_type"]
     match action:
         case "remove":
@@ -24,6 +24,8 @@ def format_node(item, res, ind):
         case "add":
             sign = "+ "
         case "unchanged":
+            sign = "  "
+        case _:
             sign = "  "
     if node_type == "node":
         if action == "change":
@@ -39,12 +41,11 @@ def format_node(item, res, ind):
             res.append(f"{ind}- {name}: {{")
             tmp = ind
             ind += "    "
-            child_nodes = process_ast(value, res, ind)
+            child_nodes = process_ast(old_value, res, ind)
             res.append(child_nodes)
-
             ind = tmp
             res.append(f"{ind}  }}")
-            res.append(f"{ind}+ {name}: {old_value}")
+            res.append(f"{ind}+ {name}: {value}")
         else:
             res.append(f"{ind}{sign}{name}: {{")
             tmp = ind
@@ -54,3 +55,14 @@ def format_node(item, res, ind):
             ind = tmp
             res.append(f"{ind}  }}")
     return res
+
+
+def format_value(value):
+    result = ""
+    if isinstance(value, bool):
+        result = str(value).lower()
+    elif value is None:
+        result = "null"
+    else:
+        result = value
+    return result
