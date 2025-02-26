@@ -9,7 +9,7 @@ package-install:
 package-reinstall:
 	uv tool install --reinstall dist/*.whl
 lint:
-	uv run ruff check
+	uv run ruff check --fix
 test:
 	uv run pytest -vv
 test-coverage:

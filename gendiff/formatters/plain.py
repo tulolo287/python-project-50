@@ -1,6 +1,6 @@
 def format_plain(ast):
     res = process_ast(ast)
-    return res + "\n"
+    return res
 
 
 def process_ast(ast, prev=""):

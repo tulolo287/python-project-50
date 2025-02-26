@@ -7,6 +7,7 @@
                 "name": "follow",
                 "node_type": "node",
                 "value": false,
+                "old_value": null,
                 "action": "add"
             },
             {
@@ -20,6 +21,7 @@
                 "name": "setting2",
                 "node_type": "node",
                 "value": 200,
+                "old_value": null,
                 "action": "remove"
             },
             {
@@ -33,6 +35,7 @@
                 "name": "setting4",
                 "node_type": "node",
                 "value": "blah blah",
+                "old_value": null,
                 "action": "add"
             },
             {
@@ -47,6 +50,7 @@
                         "action": "unchanged"
                     }
                 ],
+                "old_value": null,
                 "action": "add"
             },
             {
@@ -81,6 +85,7 @@
                         "name": "ops",
                         "node_type": "node",
                         "value": "vops",
+                        "old_value": null,
                         "action": "add"
                     }
                 ],
@@ -178,6 +183,7 @@
                 "action": "unchanged"
             }
         ],
+        "old_value": null,
         "action": "remove"
     },
     {
@@ -221,6 +227,7 @@
                 "action": "unchanged"
             }
         ],
+        "old_value": null,
         "action": "add"
     }
 ]

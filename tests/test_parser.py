@@ -59,6 +59,14 @@ testdata = [
         "test_data/plain/result.txt",
     ),
     (
+        ["test_data/simple/file1.json", "test_data/simple/file2.json", "json"],
+        "test_data/json/result.txt",
+    ),
+    (
+        ["test_data/simple/file1.yml", "test_data/simple/file2.yml", "json"],
+        "test_data/json/result.txt",
+    ),
+    (
         ["test_data/nested/file1.json", "test_data/nested/file2.json", "json"],
         "test_data/json/result_nested.txt",
     ),

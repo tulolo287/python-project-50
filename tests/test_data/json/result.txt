@@ -3,6 +3,7 @@
         "name": "follow",
         "node_type": "node",
         "value": false,
+        "old_value": null,
         "action": "remove"
     },
     {
@@ -16,6 +17,7 @@
         "name": "proxy",
         "node_type": "node",
         "value": "123.234.53.22",
+        "old_value": null,
         "action": "remove"
     },
     {
@@ -29,6 +31,7 @@
         "name": "verbose",
         "node_type": "node",
         "value": true,
+        "old_value": null,
         "action": "add"
     }
 ]

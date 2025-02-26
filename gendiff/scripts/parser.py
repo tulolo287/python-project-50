@@ -10,6 +10,7 @@ def generate_diff(file_path1, file_path2, format_name="stylish"):
     file2 = load_file(file_path2)
 
     ast = generate_ast(file1, file2)
+
     if format_name == "stylish":
         return format_stylish(ast)
     elif format_name == "plain":
@@ -26,9 +27,7 @@ def load_file(file_path):
         return yaml.load(open(file_path), Loader=yaml.Loader)
 
 
-def generate_ast(file1, file2):
-    ast = []
-
+def get_data(file1, file2):
     file1_elements = set(file1)
     file2_elements = set(file2)
 
@@ -37,63 +36,84 @@ def generate_ast(file1, file2):
     common_data = file1_elements & file2_elements
     all_data = sorted(file1_elements | file2_elements)
 
+    return minus_data, plus_data, common_data, all_data
+
+
+def get_common_node(value1, value2):
+    old_value = value1
+    node = value2
+    node_type = "node"
+    action = "unchanged"
+    if isinstance(value1, dict) and isinstance(value2, dict):
+        node = generate_ast(value1, value2)
+        node_type = "list"
+    elif isinstance(value1, dict):
+        node = generate_ast(value1, value1)
+        old_value = node
+        node = value2
+        node_type = "list"
+        action = "change"
+    elif isinstance(value2, dict):
+        node = generate_ast(value2, value2)
+        old_value = value1
+        node_type = "list"
+        action = "change"
+    elif value1 != value2:
+        old_value = value1
+        node = value2
+        node_type = "node"
+        action = "change"
+    return node, node_type, old_value, action
+
+
+def get_remove_node(value1):
+    action = "remove"
+    old_value = None
+    if isinstance(value1, dict):
+        node = generate_ast(value1, value1)
+        node_type = "list"
+    else:
+        node = value1
+        node_type = "node"
+    return node, node_type, old_value, action
+
+
+def get_add_node(value2):
+    action = "add"
+    old_value = None
+    if isinstance(value2, dict):
+        node = generate_ast(value2, value2)
+        node_type = "list"
+    else:
+        node = value2
+        node_type = "node"
+    return node, node_type, old_value, action
+
+
+def generate_ast(file1, file2):
+    ast = []
+    minus_data, plus_data, common_data, all_data = get_data(file1, file2)
+
     for key in all_data:
+        old_value = None
+        node = None
+        node_type = "node"
+        action = "unchanged"
         if key in common_data:
-            old_value = file1[key]
-            node = file2[key]
-            node_type = "node"
-            action = "unchanged"
-            if isinstance(file1[key], dict) and isinstance(file2[key], dict):
-                node = generate_ast(file1[key], file2[key])
-                node_type = "list"
-            elif isinstance(file1[key], dict):
-                node = generate_ast(file1[key], file1[key])
-                old_value = node
-                node = file2[key]
-                node_type = "list"
-                action = "change"
-            elif file1[key] != file2[key]:
-                old_value = file1[key]
-                node = file2[key]
-                node_type = "node"
-                action = "change"
-            ast.append(
-                {
-                    "name": key,
-                    "node_type": node_type,
-                    "value": node,
-                    "old_value": old_value,
-                    "action": action,
-                }
+            node, node_type, old_value, action = get_common_node(
+                file1[key], file2[key]
             )
         elif key in minus_data:
-            if isinstance(file1[key], dict):
-                node = generate_ast(file1[key], file1[key])
-                node_type = "list"
-            else:
-                node = file1[key]
-                node_type = "node"
-            ast.append(
-                {
-                    "name": key,
-                    "node_type": node_type,
-                    "value": node,
-                    "action": "remove",
-                }
-            )
+            node, node_type, old_value, action = get_remove_node(file1[key])
         elif key in plus_data:
-            if isinstance(file2[key], dict):
-                node = generate_ast(file2[key], file2[key])
-                node_type = "list"
-            else:
-                node = file2[key]
-                node_type = "node"
-            ast.append(
-                {
-                    "name": key,
-                    "node_type": node_type,
-                    "value": node,
-                    "action": "add",
-                }
-            )
+            node, node_type, old_value, action = get_add_node(file2[key])
+        ast.append(
+            {
+                "name": key,
+                "node_type": node_type,
+                "value": node,
+                "old_value": old_value,
+                "action": action,
+            }
+        )
     return ast
