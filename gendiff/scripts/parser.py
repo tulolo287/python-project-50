@@ -66,26 +66,13 @@ def get_common_node(value1, value2):
     return node, node_type, old_value, action
 
 
-def get_remove_node(value1):
-    action = "remove"
+def get_node(value, action):
     old_value = None
-    if isinstance(value1, dict):
-        node = generate_ast(value1, value1)
+    if isinstance(value, dict):
+        node = generate_ast(value, value)
         node_type = "list"
     else:
-        node = value1
-        node_type = "node"
-    return node, node_type, old_value, action
-
-
-def get_add_node(value2):
-    action = "add"
-    old_value = None
-    if isinstance(value2, dict):
-        node = generate_ast(value2, value2)
-        node_type = "list"
-    else:
-        node = value2
+        node = value
         node_type = "node"
     return node, node_type, old_value, action
 
@@ -104,9 +91,9 @@ def generate_ast(file1, file2):
                 file1[key], file2[key]
             )
         elif key in minus_data:
-            node, node_type, old_value, action = get_remove_node(file1[key])
+            node, node_type, old_value, action = get_node(file1[key], "remove")
         elif key in plus_data:
-            node, node_type, old_value, action = get_add_node(file2[key])
+            node, node_type, old_value, action = get_node(file2[key], "add")
         ast.append(
             {
                 "name": key,

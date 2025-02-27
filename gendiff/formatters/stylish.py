@@ -29,6 +29,31 @@ def format_node(res, item, ind, sign):
     value = format_value(item["value"])
     old_value = format_value(item.get("old_value", None))
     if action == "change":
+        format_action_change(res, value, old_value, name, ind, sign)
+    else:
+        res.append(f"{ind}{sign}{name}: {value}")
+
+
+def format_action_change(res, value, old_value, name, ind, sign):
+    if isinstance(value, list):
+        res.append(f"{ind}- {name}: {old_value}")
+        res.append(f"{ind}+ {name}: {{")
+        tmp = ind
+        ind += "    "
+        child_nodes = process_ast(value, res, ind)
+        res.append(child_nodes)
+        ind = tmp
+        res.append(f"{ind}  }}")
+    elif isinstance(old_value, list):
+        res.append(f"{ind}- {name}: {{")
+        tmp = ind
+        ind += "    "
+        child_nodes = process_ast(old_value, res, ind)
+        res.append(child_nodes)
+        ind = tmp
+        res.append(f"{ind}  }}")
+        res.append(f"{ind}+ {name}: {value}")
+    else:
         if not old_value and old_value != 0:
             res.append(f"{ind}- {name}: ")
         else:
@@ -37,8 +62,6 @@ def format_node(res, item, ind, sign):
             res.append(f"{ind}+ {name}: ")
         else:
             res.append(f"{ind}+ {name}: {value}")
-    else:
-        res.append(f"{ind}{sign}{name}: {value}")
 
 
 def format_list(res, item, ind, sign):
@@ -47,24 +70,7 @@ def format_list(res, item, ind, sign):
     value = format_value(item["value"])
     old_value = format_value(item.get("old_value", None))
     if action == "change":
-        if isinstance(value, list):
-            res.append(f"{ind}- {name}: {old_value}")
-            res.append(f"{ind}+ {name}: {{")
-            tmp = ind
-            ind += "    "
-            child_nodes = process_ast(value, res, ind)
-            res.append(child_nodes)
-            ind = tmp
-            res.append(f"{ind}  }}")
-        else:
-            res.append(f"{ind}- {name}: {{")
-            tmp = ind
-            ind += "    "
-            child_nodes = process_ast(old_value, res, ind)
-            res.append(child_nodes)
-            ind = tmp
-            res.append(f"{ind}  }}")
-            res.append(f"{ind}+ {name}: {value}")
+        format_action_change(res, value, old_value, name, ind, sign)
     else:
         res.append(f"{ind}{sign}{name}: {{")
         tmp = ind
@@ -78,15 +84,14 @@ def format_list(res, item, ind, sign):
 def format_ast(item, res, ind):
     action = item["action"]
     node_type = item["node_type"]
-    match action:
-        case "remove":
-            sign = "- "
-        case "add":
-            sign = "+ "
-        case "unchanged":
-            sign = "  "
-        case _:
-            sign = "  "
+    if action == "remove":
+        sign = "- "
+    elif action == "add":
+        sign = "+ "
+    elif action == "unchanged":
+        sign = "  "
+    else:
+        sign = "  "
     if node_type == "node":
         format_node(res, item, ind, sign)
     elif node_type == "list":
